@@ -1,3 +1,5 @@
 #!/bin/bash
 
-cp -r ./ ~/
+cp .tmux.conf ~/
+cp .vimrc ~/
+cp -r .vim ~/
