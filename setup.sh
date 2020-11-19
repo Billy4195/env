@@ -1,6 +1,7 @@
 #!/bin/bash
 
 alias aptInst="sudo apt install -y"
+srcDir=$(dirname "$0")
 
 check_or_install_git () {
     if ! command -v git >/dev/null;
@@ -37,6 +38,43 @@ check_or_set_nvim_alias () {
     fi
 }
 
+check_or_install_nvim_config () {
+    nvimConfigDir="$HOME/.config/nvim"
+    nvimConfigFile="$nvimConfigDir/init.vim"
+    if ! command -v curl >/dev/null;
+    then
+        aptInst curl
+    fi
+    if [ ! -f ~/.local/share/nvim/site/autoload/plug.vim ];
+    then
+        echo "Can't find vim-plug"
+        echo "Install vim-plug..."
+        sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+           https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    fi
+    if [ ! -d ~/.config/nvim ];
+    then
+        echo "Nvim config folder doesn't exist."
+        echo "Create nvim config folder"
+        mkdir -p ~/.config/nvim
+    else
+        echo "Found nvim config folder"
+    fi
+
+    if [ ! -f $nvimConfigFile ];
+    then
+        echo "Nvim init.vim not found"
+        echo "Copy init.vim..."
+        echo "cp $srcDir/init.vim $nvimConfigFile"
+        cp "$srcDir/init.vim" "$nvimConfigFile"
+
+        echo "Installl plugins"
+        nvim --headless +PlugInstall +qall
+    else
+        echo "Nvim init.vim found"
+    fi
+}
+
 check_or_install_neovim () {
     if ! command -v nvim >/dev/null;
     then 
@@ -51,6 +89,7 @@ check_or_install_neovim () {
         echo "Neovim already installed."
     fi
     check_or_set_nvim_alias
+    check_or_install_nvim_config
 }
 
 check_or_install_tmux () {

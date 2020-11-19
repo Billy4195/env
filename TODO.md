@@ -1,4 +1,4 @@
-[] neovim init.vim
-[] neovim install vim-plug
-[] noevim install plugins
+[x] neovim init.vim
+[x] neovim install vim-plug
+[x] noevim install plugins
 [] tmux configuration
