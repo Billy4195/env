@@ -11,4 +11,5 @@ bash setup.sh
 - [x] neovim init.vim
 - [x] neovim install vim-plug
 - [x] noevim install plugins
-- [ ] tmux configuration
+- [x] tmux configuration
+- [ ] One script to download and start setup.sh
