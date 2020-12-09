@@ -1,13 +1,13 @@
 #!/bin/bash
 
-alias aptInst="sudo apt install -y"
+aptInst="sudo apt install -y"
 srcDir=$(dirname "$0")
 
 check_or_install_git () {
     if ! command -v git >/dev/null;
     then
         echo "Can't find git, start install git..."
-        aptInst git
+        $aptInst git
         git config --global user.email "billy4195.su@gmail.com"
         git config --global user.name "Billy Su"
         git config --global alias.st "status"
@@ -33,6 +33,7 @@ check_or_set_nvim_alias () {
         echo "nvim is setup in .bashrc"
     else
         echo "nvim alias is not found"
+        echo "# Nvim setting" >> $HOME/.bashrc
         echo "alias vim='nvim'" >> $HOME/.bashrc
         echo "alias vi='nvim'" >> $HOME/.bashrc
     fi
@@ -43,7 +44,7 @@ check_or_install_nvim_config () {
     nvimConfigFile="$nvimConfigDir/init.vim"
     if ! command -v curl >/dev/null;
     then
-        aptInst curl
+        $aptInst curl
     fi
     if [ ! -f $HOME/.local/share/nvim/site/autoload/plug.vim ];
     then
@@ -82,7 +83,7 @@ check_or_install_neovim () {
         cd $HOME/repo
         git clone https://github.com/neovim/neovim.git
         cd neovim
-        aptInst ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
+        $aptInst ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip
         make CMAKE_BUILD_TYPE=Release
         sudo make install
     else
@@ -92,14 +93,29 @@ check_or_install_neovim () {
     check_or_install_nvim_config
 }
 
+check_or_install_tmux_config () {
+    tmuxConfigFile="$HOME/.tmux.conf"
+    if [ ! -f $tmuxConfigFile ];
+    then
+        echo "Tmux .tmux.conf not found"
+        echo "Copy .tmux.conf..."
+        echo "cp $srcDir/.tmux.conf $tmuxConfigFile"
+        cp "$srcDir/.tmux.conf" "$tmuxConfigFile"
+
+    else
+        echo "Tmux configuration file is found"
+    fi
+}
+
 check_or_install_tmux () {
     if ! command -v tmux >/dev/null;
     then
         echo "Can't find tmux, start install tmux..."
-        aptInst tmux
+        $aptInst tmux
     else
         echo "tmux already installed."
     fi 
+    check_or_install_tmux_config
 }
 
 check_or_install_git
