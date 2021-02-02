@@ -99,9 +99,8 @@ check_or_install_tmux_config () {
     then
         echo "Tmux .tmux.conf not found"
         echo "Copy .tmux.conf..."
-        echo "cp $srcDir/.tmux.conf $tmuxConfigFile"
-        cp "$srcDir/.tmux.conf" "$tmuxConfigFile"
-
+        echo "cp $srcDir/tmux.conf $tmuxConfigFile"
+        cp "$srcDir/tmux.conf" "$tmuxConfigFile"
     else
         echo "Tmux configuration file is found"
     fi
